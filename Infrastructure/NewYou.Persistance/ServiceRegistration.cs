@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NewYou.Application.Abstraction.Services;
 using NewYou.Domain.Entities;
 using NewYou.Persistance.Contexts;
+using NewYou.Persistence.Concretes.Services;
 
 namespace NewYou.Persistance;
 
@@ -19,6 +21,7 @@ public static class ServiceRegistiration
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();*/
+        services.AddScoped<ITokenService, TokenService>();
 
 
         services.AddIdentity<Account, IdentityRole<Guid>>(opt =>

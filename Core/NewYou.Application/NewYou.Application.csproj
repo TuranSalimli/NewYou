@@ -14,12 +14,9 @@
     <Folder Include="Abstraction\Repositories\Command\" />
     <Folder Include="Abstraction\Repositories\Query\" />
     <Folder Include="Abstraction\UnitOfWorks\" />
-    <Folder Include="Abstraction\Services\" />
-    <Folder Include="Features\Commands\" />
     <Folder Include="Features\Queries\" />
     <Folder Include="Helpers\" />
     <Folder Include="GenericResponses\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Profiles\" />
   </ItemGroup>
 
