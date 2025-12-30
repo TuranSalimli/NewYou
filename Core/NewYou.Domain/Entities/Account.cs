@@ -14,6 +14,9 @@ public class Account : IdentityUser<Guid>
     public DateTime? LastLoginDate { get; set; }
     public bool IsArchived { get; set; } = false;
 
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
+
     public ICollection<Project> Projects { get; set; } = new HashSet<Project>();
 
     public ICollection<ToDoItem> ToDoItems { get; set; } = new HashSet<ToDoItem>();

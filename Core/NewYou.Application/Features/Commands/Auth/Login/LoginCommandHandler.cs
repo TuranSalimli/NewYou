@@ -34,12 +34,22 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDTO
             throw new LoginFailedException("Email və ya şifrə yanlışdır.");
         }
 
-        var token = _tokenService.CreateToken(user);
+        var (accessToken, refreshToken) = _tokenService.CreateToken(user);
+
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
+        var updateResult = await _userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+        {
+            throw new Exception("Giriş zamanı xəta baş verdi.");
+        }
 
         return new AuthResponseDTO(
-            Token: token,
+            Token: accessToken,
+            RefreshToken: refreshToken,
             Email: user.Email!,
-            Expiry: DateTime.UtcNow.AddMinutes(60) 
+            Expiry: DateTime.UtcNow.AddMinutes(60)
         );
     }
 }

@@ -15,12 +15,9 @@ public static class ServiceRegistiration
     {
 
         services.AddDbContext<NewYouDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("Default")));
-        /*services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
-        services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
-        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-        services.AddScoped<IUserService, UserService>();
+  
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();*/
+   
         services.AddScoped<ITokenService, TokenService>();
 
 
@@ -32,6 +29,9 @@ public static class ServiceRegistiration
             opt.Password.RequireUppercase = false;
             opt.Password.RequireDigit = false;
             opt.SignIn.RequireConfirmedEmail = false;
+
+            opt.SignIn.RequireConfirmedEmail = true;
+            opt.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
         })
          .AddDefaultTokenProviders()
          .AddEntityFrameworkStores<NewYouDbContext>();
