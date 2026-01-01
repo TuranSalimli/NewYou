@@ -341,7 +341,7 @@ namespace NewYou.Persistance.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("NewYou.Domain.Entities.ToDoItem", b =>
@@ -393,7 +393,7 @@ namespace NewYou.Persistance.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ToDoItems");
+                    b.ToTable("ToDoItems", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

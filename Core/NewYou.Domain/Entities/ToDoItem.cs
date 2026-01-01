@@ -1,6 +1,5 @@
 ﻿using NewYou.Domain.Entities.Common;
 using NewYou.Domain.Enums;
-
 namespace NewYou.Domain.Entities;
 public class ToDoItem : BaseEntity
 {

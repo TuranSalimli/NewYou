@@ -12,9 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Concretes\UnitOfWorks\" />
-    <Folder Include="Concretes\Repositories\Command\" />
-    <Folder Include="Concretes\Repositories\Query\" />
     <Folder Include="Seeders\" />
   </ItemGroup>
 

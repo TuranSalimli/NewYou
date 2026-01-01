@@ -11,12 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstraction\Repositories\Command\" />
-    <Folder Include="Abstraction\Repositories\Query\" />
-    <Folder Include="Abstraction\UnitOfWorks\" />
     <Folder Include="Features\Queries\" />
     <Folder Include="Helpers\" />
-    <Folder Include="GenericResponses\" />
   </ItemGroup>
 
   <ItemGroup>
