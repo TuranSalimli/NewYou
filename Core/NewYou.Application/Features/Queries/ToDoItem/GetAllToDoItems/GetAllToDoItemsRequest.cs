@@ -6,5 +6,4 @@ namespace NewYou.Application.Features.Queries.ToDoItem.GetAllToDoItems;
 
 public class GetAllToDoItemsRequest : IRequest<Response<IList<ToDoItemDTO>>>
 {
-    public Guid OwnerId { get; set; }
 }

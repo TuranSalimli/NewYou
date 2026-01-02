@@ -8,7 +8,7 @@ public class UpdateToDoItemValidator : AbstractValidator<UpdateToDoItemRequest>
     {
         RuleFor(x => x.Id)
             .NotEmpty().WithMessage("Yenilənəcək qeydin ID-si mütləqdir.");
-
+        
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("Başlıq boş ola bilməz.")
             .MinimumLength(3).WithMessage("Başlıq ən azı 3 simvol olmalıdır.")

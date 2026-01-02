@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewYou.Application.Features.Commands.Auth.ForgetPassword;
 using NewYou.Application.Features.Commands.Auth.Login;
+using NewYou.Application.Features.Commands.Auth.RefreshToken;
 using NewYou.Application.Features.Commands.Auth.Register;
 using NewYou.Application.Features.Commands.Auth.ResetPassword;
 using NewYou.Application.Features.Commands.Auth.VerifyEmail;
@@ -53,5 +55,12 @@ public class AuthController : ControllerBase
     {
         var result = await _mediator.Send(command);
         return Ok(new { message = "Şifrəniz uğurla yeniləndi." });
+    }
+    [AllowAnonymous]
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command)
+    {
+        var response = await _mediator.Send(command);
+        return Ok(response);
     }
 }

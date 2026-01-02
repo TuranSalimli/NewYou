@@ -21,13 +21,13 @@ public class TokenService : ITokenService
     public (string accessToken, string refreshToken) CreateToken(Account user)
     {
         var claims = new List<Claim>
-    {
-        new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-        new Claim("FirstName", user.FirstName ?? ""),
-        new Claim("LastName", user.LastName ?? "")
-    };
+        {
+            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+            new Claim("FirstName", user.FirstName ?? ""),
+            new Claim("LastName", user.LastName ?? "")
+        };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecurityKey"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -48,6 +48,29 @@ public class TokenService : ITokenService
         var refreshToken = GenerateRefreshToken();
 
         return (accessToken, refreshToken);
+    }
+
+    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    {
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecurityKey"]!)),
+            ValidateLifetime = false 
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
+        if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+            !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenException("Etibarsız token formatı.");
+        }
+
+        return principal;
     }
 
     private string GenerateRefreshToken()
