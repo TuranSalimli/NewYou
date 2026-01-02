@@ -21,13 +21,13 @@ public class TokenService : ITokenService
     public (string accessToken, string refreshToken) CreateToken(Account user)
     {
         var claims = new List<Claim>
-        {
-            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim("FirstName", user.FirstName ?? ""),
-            new Claim("LastName", user.LastName ?? "")
-        };
+    {
+        new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+        new Claim("FirstName", user.FirstName ?? ""),
+        new Claim("LastName", user.LastName ?? "")
+    };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecurityKey"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

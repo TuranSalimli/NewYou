@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,8 @@ public static class ServiceRegistiration
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
         services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
         services.AddScoped<ITokenService, TokenService>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         services.AddIdentity<Account, IdentityRole<Guid>>(opt =>
         {

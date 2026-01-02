@@ -7,6 +7,7 @@ using NewYou.API.Middlewares;
 using NewYou.Application;
 using NewYou.Domain.Entities;
 using NewYou.Persistance;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 namespace NewYou.API;
@@ -45,19 +46,24 @@ public class Program
         builder.Services.AddApplicationServices();
 
         // Auth
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["JWT:Issuer"],
-                    ValidAudience = builder.Configuration["JWT:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecurityKey"]))
-                };
-            });
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+ .AddJwtBearer(options => {
+     options.TokenValidationParameters = new TokenValidationParameters
+     {
+         ValidateIssuer = true,
+         ValidateAudience = true,
+         ValidateLifetime = true,
+         ValidateIssuerSigningKey = true,
+         ValidIssuer = builder.Configuration["JWT:Issuer"],
+         ValidAudience = builder.Configuration["JWT:Audience"],
+         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecurityKey"]!)),
+         NameClaimType = "nameid" 
+     };
+ });
 
         builder.Services.AddAuthorization();
 
@@ -68,7 +74,7 @@ public class Program
         app.UseHttpsRedirection(); 
         app.UseRouting();
         app.UseCors("AllowAll");
-
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         app.UseAuthentication();
         app.UseAuthorization();
 

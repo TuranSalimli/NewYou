@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using NewYou.Application.Abstraction.Services;
 using NewYou.Application.Abstraction.UnitOfWorks;
 using NewYou.Application.GenericResponses; 
 using NewYou.Domain.Entities;
@@ -10,18 +11,26 @@ public class CreateToDoItemHandler : IRequestHandler<CreateToDoItemRequest, Resp
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-
-    public CreateToDoItemHandler(IUnitOfWork unitOfWork, IMapper mapper)
+   private readonly ICurrentUserService _currentUserService;
+    public CreateToDoItemHandler(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUserService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _currentUserService = currentUserService;
     }
 
     public async Task<Response<Guid>> Handle(CreateToDoItemRequest request, CancellationToken cancellationToken)
     {
+        var userId = _currentUserService.UserId;
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Response<Guid>.Fail("İstifadəçi tapılmadı. Zəhmət olmasa yenidən giriş edin.", 401);
+        }
         var writeRepository = _unitOfWork.GetWriteRepository<Domain.Entities.ToDoItem>();
 
         var todoItem = _mapper.Map<Domain.Entities.ToDoItem>(request);
+        
+        todoItem.OwnerId = Guid.Parse(userId);
 
         await writeRepository.CreateAsync(todoItem);
 

@@ -20,7 +20,5 @@ public class CreateToDoItemValidator : AbstractValidator<CreateToDoItemRequest>
         RuleFor(x => x.ProjectId)
             .NotEmpty().WithMessage("Bir layihə seçməlisiniz.");
 
-        RuleFor(x => x.OwnerId)
-            .NotEmpty().WithMessage("İstifadəçi (Owner) məlumatı mütləqdir.");
     }
 }
